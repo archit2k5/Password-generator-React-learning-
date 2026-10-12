@@ -1,10 +1,12 @@
-import React, { useState, useCallback, useEffect } from 'react'
+import React, { useState, useCallback, useEffect, useRef } from 'react'
 
 function App() {
   const [length, setLength] = useState(8);
   const [numberAllowed, setNumberAllowed] = useState(false);
   const [charAllowed, setCharAllowed] = useState(false);
   const [password, setPassword] = useState("");
+
+  const passRef = useRef(null);
 
   const generatePassword = useCallback(()=>{
     let pass = ""
@@ -21,6 +23,11 @@ function App() {
     setPassword(pass)
   }, [numberAllowed, charAllowed, length]);
 
+  const copyPasswordToClipboard = ()=>{
+    window.navigator.clipboard.writeText(password);
+    passRef.current?.select() 
+  }
+
   useEffect(()=>{
     generatePassword()
   },[length, charAllowed, numberAllowed])
@@ -34,10 +41,13 @@ function App() {
             value={password}
             placeholder='Password'
             className='bg-blue-100 outline-none w-full py-3 px-3 text-black rounded-lg'
-            readOnly>
+            readOnly
+            ref={passRef}>
 
           </input>
-          <button className='rounded-lg bg-blue-600 px-4 py-2 text-white transition hover:bg-blue-700'>Copy</button>
+          <button className='rounded-lg bg-blue-600 px-4 py-2 text-white transition hover:bg-blue-700'
+          onClick={copyPasswordToClipboard}>
+            Copy</button>
         </div>
         <div className='flex item-center mt-3 py-3 gap-8 text-blue-50 justify-center align-middle'>
           <div className='flex gap-2'>
@@ -47,7 +57,8 @@ function App() {
               max={100}
               className='cursor-pointer w-100'
               onChange={(e) => setLength(e.target.value)}
-              value={length} />
+              value={length}
+              />
             <label htmlFor='length'>Length :{length}</label>
           </div>
           <div className='flex gap-2 justify-center align-middle '>
