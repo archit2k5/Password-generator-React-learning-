@@ -15,8 +15,8 @@ function App() {
     if(numberAllowed) str+="0123456789"
     if(charAllowed) str+="!@#$%&*()_+="
 
-    for(let i = 1; i < length; i++){
-      const char = Math.floor(Math.random() * str.length+1)
+    for(let i = 0; i < length; i++){
+      const char = Math.floor(Math.random() * str.length)
       pass += str.charAt(char)
     }
 
@@ -30,7 +30,7 @@ function App() {
 
   useEffect(()=>{
     generatePassword()
-  },[length, charAllowed, numberAllowed])
+  },[length, charAllowed, numberAllowed, generatePassword])
 
   return (
     <div className='flex flex-wrap bg-black p-8 text-white h-screen w-full justify-center align-between'>
